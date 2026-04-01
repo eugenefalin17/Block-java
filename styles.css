@@ -1,0 +1,180 @@
+@font-face {
+    font-family: 'TTLakes';
+    src: url('fonts/TTLakes-Medium.woff2') format('woff2');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+font-family: TTLakes, sans-serif;
+margin: 0;
+padding: 0;
+min-width: 320px;
+max-height: 234px;
+background-color: #f8f8f8;
+}
+
+header {
+    background-image: linear-gradient(to right, #f8f8f8, #ffffff);
+    border-top: 1px solid #D9FFF5;
+}
+
+p {
+    color: #7E7E82;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 300;
+    margin: 0;
+    padding: 16px;
+}
+
+.brands {
+    overflow: hidden;
+}
+
+.brands__list {
+    display: flex;
+    gap: 16px;
+    margin: 16px;
+    transition: transform 0.5s ease; 
+} 
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 16px;
+    height: 72px;
+    flex: 0 0 240px;
+
+    border: 1px solid #EAEAEA;
+    border-radius: 8px;
+
+    background-color: #fff;
+}
+
+.brands__toggle {
+    display: none;
+}
+
+.slider-dots {
+    display: flex;
+    gap: 12px;
+    width: 204px;
+    height: 12px;
+    margin-left: 58px;
+}
+
+.dot {
+width: 12px;
+height: 12px;
+border-radius: 50%;
+background-color: #ddd;
+border: none;
+padding: 0;
+}
+
+.dot.active {
+    background-color: #B5B6BC;
+}
+
+.gradient {
+    position: fixed;
+    top: 87px;
+    right: 0;
+    width: 24px;
+    height: 81px;
+    background-image: linear-gradient(to right, transparent, #f8f8f8 90%);
+}
+
+@media (min-width: 768px) {
+    .brands__list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 24px;
+        row-gap: 16px;
+        overflow: hidden;
+        margin: 24px;
+    }
+
+    p {
+        padding-left: 24px;
+    }
+
+    .brand {
+    height: 72px;
+    width: 224px; 
+    }
+
+    .brand--sony,
+    .brand--lenovo-2,
+    .brand--samsung-2,
+    .brand--apple-2,
+    .brand--viewsonic {
+        display: none;
+    }
+
+    .dot {
+        display: none;
+    }
+    .brands__toggle {
+         display: inline-flex;
+    align-items: center;/*выравн по вертикали*/
+    gap: 9px;
+    margin-left: 24px;
+    font-size: 16px;
+    color: #1B1C21;
+    text-decoration: none;
+    }
+}
+
+@media (min-width: 1120px) {
+ .brands__list {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 32px;
+        row-gap: 16px;
+        margin: 24px;
+        margin-left: 32px;
+    } 
+  
+  p {
+       padding-left: 32px;
+  }
+
+ .brand {
+     height: 72px;
+    width: 240px; 
+  }
+
+    .brand--sony,
+    .brand--viewsonic {
+        display: flex;
+    } 
+  
+    .brands__list .brand:nth-child(n+9) {
+    display: none;
+  }  
+  
+  .brands__list.brands__list--expanded .brand:nth-child(n+9) {
+    display: flex;
+  }
+
+ .brands__toggle {
+     display: inline-flex;
+    align-items: center;/*выравн по вертикали*/
+    gap: 9px;
+    font-size: 16px;
+    color: #1B1C21;
+    text-decoration: none;
+    margin-left: 32px; 
+  }
+}
