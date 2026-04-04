@@ -1,50 +1,84 @@
 var toggleBtn = document.querySelector('.brands__toggle');
 var brandsList = document.querySelector('.brands__list');
-
-toggleBtn.addEventListener('click', function(e) {
-  e.preventDefault();
-
-  // переключаем класс expanded у списка брендов
-  brandsList.classList.toggle('brands__list--expanded');
-
-  // меняем текст и иконку кнопки
-  if (brandsList.classList.contains('brands__list--expanded')) {
-    toggleBtn.innerHTML = '<img src="images/expand.svg" alt="expand"> Скрыть';
-  } else {
-    toggleBtn.innerHTML = '<img src="images/expand.svg" alt="expand"> Показать все';
-  }
-});
-
-// ======= Slider для мобильного (320px) =======
 var dots = document.querySelectorAll('.dot');
-var brandsList = document.querySelector('.brands__list');
-var brandWidth = 240; // ширина одного бренда
-var gap = 16; // gap между брендами
+
 var currentIndex = 0;
+var brandWidth = 240;
+var gap = 16;
 
-// функция для сдвига списка
-function updateSlider(index) {
-    var offset = index * (brandWidth + gap);
-    brandsList.style.transition = 'transform 0.3s ease';
-    brandsList.style.transform = 'translateX(-' + offset + 'px)';
+// ===== КНОПКА "Показать все / Скрыть" (768+) =====
+if (toggleBtn) {
+  toggleBtn.addEventListener('click', function(e) {
+    e.preventDefault();
 
-    // обновляем активную точку
-    dots.forEach(function(dot, i) {
-        dot.classList.toggle('active', i === index);
-    });
+    brandsList.classList.toggle('brands__list--expanded');
+
+    if (brandsList.classList.contains('brands__list--expanded')) {
+      toggleBtn.innerHTML = '<img src="images/expand.svg" alt=""> Скрыть';
+    } else {
+      toggleBtn.innerHTML = '<img src="images/expand.svg" alt=""> Показать все';
+    }
+  });
 }
 
-// навешиваем событие на точки
-dots.forEach(function(dot, i) {
-    dot.addEventListener('click', function(e) {
-        e.preventDefault();
-        currentIndex = i;
-        updateSlider(currentIndex);
-    });
+// ===== СЛАЙДЕР 320px (свайп + клик) =====
+var startX = 0;
+var endX = 0;
+
+// функция смены слайда
+function goToSlide(index) {
+  if (index < 0) index = 0;
+  if (index > dots.length - 1) index = dots.length - 1;
+
+  currentIndex = index;
+
+  var offset = currentIndex * (brandWidth + gap);
+  brandsList.style.transform = 'translateX(-' + offset + 'px)';
+
+  // обновляем точки
+  dots.forEach(function(dot, i) {
+    dot.classList.toggle('active', i === currentIndex);
+  });
+}
+
+// ===== СВАЙП (телефон) =====
+brandsList.addEventListener('touchstart', function(e) {
+  startX = e.touches[0].clientX;
 });
 
-// инициализация на первой точке
-updateSlider(0);
+brandsList.addEventListener('touchend', function(e) {
+  endX = e.changedTouches[0].clientX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  var diff = startX - endX;
+
+  if (Math.abs(diff) > 50) { // минимальный свайп
+    if (diff > 0) {
+      // свайп влево → следующий
+      goToSlide(currentIndex + 1);
+    } else {
+      // свайп вправо → предыдущий
+      goToSlide(currentIndex - 1);
+    }
+  }
+}
+
+// ===== КЛИК ПО КАРТОЧКЕ (десктоп) =====
+var brands = document.querySelectorAll('.brand');
+
+brands.forEach(function(brand) {
+  brand.addEventListener('click', function(e) {
+    if (window.innerWidth < 768) {
+      e.preventDefault();
+      goToSlide(currentIndex + 1);
+    }
+  });
+});
+
+// старт
+goToSlide(0);
 
 // --- Сброс трансформации при изменении размера окна ---
 window.addEventListener('resize', function() {
@@ -73,5 +107,3 @@ window.addEventListener('resize', function() {
         updateSlider(currentIndex);
     }
 });
-
-
