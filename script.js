@@ -23,9 +23,15 @@ if (toggleBtn) {
 
 // ===== Функция перехода на слайд =====
 function goToSlide(index) {
-  // вычисляем максимально возможный индекс с учётом всех карточек
   var brandWidth = brands[0].offsetWidth;
-  var maxIndex = brands.length - 1;
+  var containerWidth = brandsList.parentElement.offsetWidth;
+
+  // сколько карточек видно
+  var visibleCount = Math.floor(containerWidth / (brandWidth + gap));
+
+  // правильный максимум
+  var maxIndex = brands.length - visibleCount;
+
   if (index < 0) index = 0;
   if (index > maxIndex) index = maxIndex;
 
@@ -34,10 +40,11 @@ function goToSlide(index) {
   var offset = currentIndex * (brandWidth + gap);
   brandsList.style.transform = 'translateX(-' + offset + 'px)';
 
-  // обновляем точки: точка = страница (например, каждые 3 карточки)
+  // точки
   for (var i = 0; i < dots.length; i++) {
-    var pageStart = i * 3; // 3 карточки на экран
-    var pageEnd = pageStart + 2;
+    var pageStart = i * visibleCount;
+    var pageEnd = pageStart + visibleCount - 1;
+
     if (currentIndex >= pageStart && currentIndex <= pageEnd) {
       dots[i].classList.add('active');
     } else {
@@ -46,23 +53,44 @@ function goToSlide(index) {
   }
 }
 
+
 // ===== СВАЙП =====
 var startX = 0;
-var endX = 0;
+var currentX = 0;
+var isSwiping = false;
 
 brandsList.addEventListener('touchstart', function(e) {
   startX = e.touches[0].clientX;
+  isSwiping = true;
 });
+
+brandsList.addEventListener('touchmove', function(e) {
+  if (!isSwiping) return;
+
+  currentX = e.touches[0].clientX;
+  var diff = startX - currentX;
+
+  // блокируем вертикальный скролл при свайпе
+  if (Math.abs(diff) > 10) {
+    e.preventDefault();
+  }
+}, { passive: false });
 
 brandsList.addEventListener('touchend', function(e) {
-  endX = e.changedTouches[0].clientX;
-  var diff = startX - endX;
-  if (Math.abs(diff) > 30) {
-    if (diff > 0) goToSlide(currentIndex + 1); // вперед
-    else goToSlide(currentIndex - 1); // назад
-  }
-});
+  if (!isSwiping) return;
 
+  var diff = startX - currentX;
+
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) {
+      goToSlide(currentIndex + 1); // вперед
+    } else {
+      goToSlide(currentIndex - 1); // назад
+    }
+  }
+
+  isSwiping = false;
+});
 // ===== КЛИК ПО КАРТОЧКЕ =====
 for (var i = 0; i < brands.length; i++) {
   brands[i].addEventListener('click', (function(i){
