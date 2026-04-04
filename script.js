@@ -24,7 +24,8 @@ if (toggleBtn) {
 
 // ===== Функция перехода на слайд =====
 function goToSlide(index) {
-  var maxIndex = dots.length - 1;
+  // вычисляем максимально возможный индекс с учётом всех карточек
+  var maxIndex = brands.length - 1;
   if (index < 0) index = 0;
   if (index > maxIndex) index = maxIndex;
 
@@ -33,8 +34,11 @@ function goToSlide(index) {
   var offset = currentIndex * (brandWidth + gap);
   brandsList.style.transform = 'translateX(-' + offset + 'px)';
 
+  // обновляем точки: точка = страница (например, каждые 3 карточки)
   for (var i = 0; i < dots.length; i++) {
-    if (i === currentIndex) {
+    var pageStart = i * 3; // 3 карточки на экран
+    var pageEnd = pageStart + 2;
+    if (currentIndex >= pageStart && currentIndex <= pageEnd) {
       dots[i].classList.add('active');
     } else {
       dots[i].classList.remove('active');
@@ -42,7 +46,7 @@ function goToSlide(index) {
   }
 }
 
-// ===== СВАЙП (телефон) =====
+// ===== СВАЙП =====
 var startX = 0;
 var endX = 0;
 
@@ -52,63 +56,41 @@ brandsList.addEventListener('touchstart', function(e) {
 
 brandsList.addEventListener('touchend', function(e) {
   endX = e.changedTouches[0].clientX;
-  handleSwipe();
+  var diff = startX - endX;
+  if (Math.abs(diff) > 50) {
+    if (diff > 0) goToSlide(currentIndex + 1); // вперед
+    else goToSlide(currentIndex - 1); // назад
+  }
 });
 
-function handleSwipe() {
-  var diff = startX - endX;
-
-  if (Math.abs(diff) > 50) {
-    if (diff > 0) {
-      // свайп влево → следующий
-      goToSlide(currentIndex + 1);
-    } else {
-      // свайп вправо → предыдущий
-      goToSlide(currentIndex - 1);
-    }
-  }
-}
-
-// ===== КЛИК ПО КАРТОЧКЕ (мобильный) =====
+// ===== КЛИК ПО КАРТОЧКЕ =====
 for (var i = 0; i < brands.length; i++) {
   brands[i].addEventListener('click', (function(i){
     return function(e){
       if (window.innerWidth < 768) {
         e.preventDefault();
-        if (i > currentIndex) {
-          goToSlide(currentIndex + 1);
-        } else if (i < currentIndex) {
-          goToSlide(currentIndex - 1);
-        }
+        if (i > currentIndex) goToSlide(currentIndex + 1);
+        else if (i < currentIndex) goToSlide(currentIndex - 1);
       }
     }
   })(i));
 }
 
-// ===== СБРОС ПРИ РАЗМЕРЕ ОКНА =====
+// ===== РЕСАЙЗ =====
 window.addEventListener('resize', function() {
-  var screenWidth = window.innerWidth;
-
-  if (screenWidth >= 768) {
-    // Сбрасываем слайдер transform
+  if (window.innerWidth >= 768) {
     brandsList.style.transform = '';
     currentIndex = 0;
-
-    // Показываем все бренды для сетки
     for (var i = 0; i < brands.length; i++) {
-      brands[i].style.display = ''; // оставляем CSS-отображение по медиа-запросу
+      brands[i].style.display = '';
     }
-
-    // НЕ трогаем кнопку toggle и класс expanded
   } else {
-    // На мобильном 320px восстанавливаем слайдер и точки
     for (var i = 0; i < brands.length; i++) {
       brands[i].style.display = 'flex';
     }
-
     goToSlide(currentIndex);
   }
 });
 
-// ===== СТАРТОВЫЙ СЛАЙД =====
+// стартовый слайд
 goToSlide(0);
