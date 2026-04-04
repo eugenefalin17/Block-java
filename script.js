@@ -4,7 +4,6 @@ var dots = document.querySelectorAll('.dot');
 var brands = document.querySelectorAll('.brand');
 
 var currentIndex = 0;
-var brandWidth = 240;
 var gap = 16;
 
 // ===== КНОПКА "Показать все / Скрыть" (768+) =====
@@ -25,6 +24,7 @@ if (toggleBtn) {
 // ===== Функция перехода на слайд =====
 function goToSlide(index) {
   // вычисляем максимально возможный индекс с учётом всех карточек
+  var brandWidth = brands[0].offsetWidth;
   var maxIndex = brands.length - 1;
   if (index < 0) index = 0;
   if (index > maxIndex) index = maxIndex;
@@ -57,7 +57,7 @@ brandsList.addEventListener('touchstart', function(e) {
 brandsList.addEventListener('touchend', function(e) {
   endX = e.changedTouches[0].clientX;
   var diff = startX - endX;
-  if (Math.abs(diff) > 50) {
+  if (Math.abs(diff) > 30) {
     if (diff > 0) goToSlide(currentIndex + 1); // вперед
     else goToSlide(currentIndex - 1); // назад
   }
