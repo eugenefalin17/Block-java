@@ -15,7 +15,6 @@ font-family: TTLakes, sans-serif;
 margin: 0;
 padding: 0;
 min-width: 320px;
-max-height: 234px;
 background-color: #f8f8f8;
 margin: 0 auto;
 max-width: 1120px;
@@ -38,11 +37,12 @@ p {
 }
 
 .brands {
-    overflow: hidden;
+    overflow: visible;
 }
 
 .brands__wrapper {
 overflow-x: auto;
+-webkit-overflow-scrolling: touch;
 }
 
 .brands__list {
@@ -99,6 +99,7 @@ padding: 0;
 
 .gradient {
     position: absolute;
+    pointer-events: none;
     top: 87px;
     right: 0;
     width: 24px;
