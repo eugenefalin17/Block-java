@@ -17,6 +17,8 @@ padding: 0;
 min-width: 320px;
 max-height: 234px;
 background-color: #f8f8f8;
+margin: 0 auto;
+max-width: 1120px;
 }
 
 header {
@@ -43,7 +45,8 @@ p {
     display: flex;
     gap: 16px;
     margin: 16px;
-    transition: transform 0.5s ease; 
+    transition: transform 0.3s ease; 
+    touch-action: pan-y;
 } 
 
 .brand {
@@ -96,6 +99,7 @@ padding: 0;
 }
 
 @media (min-width: 768px) {
+
     .brands__list {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -114,13 +118,13 @@ padding: 0;
     width: 224px; 
     }
 
-    .brand--sony,
-    .brand--lenovo-2,
-    .brand--samsung-2,
-    .brand--apple-2,
-    .brand--viewsonic {
-        display: none;
-    }
+    .brands__list .brand:nth-child(n+7) {
+    display: none;
+  }
+
+  .brands__list--expanded .brand:nth-child(n+7) {
+    display: flex;
+  }
 
     .dot {
         display: none;
@@ -137,6 +141,7 @@ padding: 0;
 }
 
 @media (min-width: 1120px) {
+
  .brands__list {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
