@@ -41,13 +41,21 @@ p {
     overflow: hidden;
 }
 
+.brands__wrapper {
+overflow-x: auto;
+}
+
 .brands__list {
     display: flex;
     gap: 16px;
     margin: 16px;
-    transition: transform 0.3s ease; 
-    touch-action: pan-y;
+   scroll-snap-type: x mandatory;
+   scroll-behavior: smooth;
 } 
+
+.brands__wrapper::-webkit-scrollbar {
+    display: none;
+}
 
 .brand {
     display: flex;
@@ -57,7 +65,7 @@ p {
     padding: 0 16px;
     height: 72px;
     flex: 0 0 240px;
-
+    scroll-snap-align: start;
     border: 1px solid #EAEAEA;
     border-radius: 8px;
 
@@ -90,7 +98,7 @@ padding: 0;
 }
 
 .gradient {
-    position: fixed;
+    position: absolute;
     top: 87px;
     right: 0;
     width: 24px;
