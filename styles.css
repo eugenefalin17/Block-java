@@ -38,9 +38,11 @@ p {
 
 .brands {
     overflow: visible;
+   overflow: hidden;
 }
 
 .brands__wrapper {
+    overflow: hidden;
 overflow-x: auto;
 -webkit-overflow-scrolling: touch;
 }
@@ -51,6 +53,7 @@ overflow-x: auto;
     margin: 16px;
    scroll-snap-type: x mandatory;
    scroll-behavior: smooth;
+   transition: transform 0.3s ease;
 } 
 
 .brands__wrapper::-webkit-scrollbar {
@@ -169,11 +172,11 @@ padding: 0;
     width: 240px; 
   }
 
-    .brand--sony,
-    .brand--viewsonic {
+    .brands__list .brand:nth-child(7),
+    .brands__list .brand:nth-child(8) {
         display: flex;
-    } 
-  
+    }
+
     .brands__list .brand:nth-child(n+9) {
     display: none;
   }  
